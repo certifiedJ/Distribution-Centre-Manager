@@ -1,0 +1,28 @@
+# Dev profile
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:h2:mem:devdb
+  security:
+    user:
+      name: admin1
+      password: admin1
+server:
+  port: 8081
+# QA profile
+---
+spring:
+  config:
+    activate:
+      on-profile: qa
+  datasource:
+    url: jdbc:h2:mem:qadb
+  security:
+    user:
+      name: admin2
+      password: admin2
+server:
+  port: 8082
