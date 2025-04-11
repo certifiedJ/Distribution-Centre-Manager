@@ -9,9 +9,21 @@ This guide provides an overview of the REST API endpoints for managing distribut
 The examples assume the API is running at `http://localhost:8081`. Adjust the URL based on your deployment.
 
 ## Endpoints
-
-### 1. Add Item to Distribution Centre
-**Description**: Adds an item to a distribution centre with a specified quantity or updates the quantity if the item already exists.  
+### 1. Get all existing Items
+**Description**: Get all existing Items from ITEMS table.  
+**Method**: `GET`  
+**URL**: `/api/items/all`  
+**Example**:
+```java
+RestTemplate restTemplate = new RestTemplate();
+String url = "http://localhost:8081/api/items/all;
+HttpHeaders headers = new HttpHeaders();
+headers.setBasicAuth("admin", "admin");
+HttpEntity<String> request = new HttpEntity<>(headers);
+ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+```
+### 2. Add existing Item to Distribution Centre
+**Description**: Adds an existing item to a distribution centre with a specified quantity or updates the quantity if the item already exists.  
 **Method**: `POST`  
 **URL**: `/api/distribution-centres/{centreId}/items?itemId={itemId}&quantity={quantity}`  
 **Example**:
@@ -23,7 +35,20 @@ headers.setBasicAuth("admin", "admin");
 HttpEntity<String> request = new HttpEntity<>(headers);
 ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
 ```
-### 2. Delete Item from Distribution Centre
+### 3. Add new Item to Items table
+**Description**: Adds a new item to item category with a specified name, brand, year, price. It will return 409 conflict if the brand and name combination exists.  
+**Method**: `POST`  
+**URL**: `/api/items/create?name=shorts&brand=YSL&year=2024&price=199.99`  
+**Example**:
+```java
+RestTemplate restTemplate = new RestTemplate();
+String url = "http://localhost:8081/api/items/create?name=shorts&brand=YSL&year=2024&price=199.99";
+HttpHeaders headers = new HttpHeaders();
+headers.setBasicAuth("admin", "admin");
+HttpEntity<String> request = new HttpEntity<>(headers);
+ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
+```
+### 4. Delete Item from Distribution Centre
 **Description**: Removes an item from a specific distribution centre.  
 **Method**: `DELETE`  
 **URL**: `/api/distribution-centres/{centreId}/items/{itemId}`  
@@ -36,7 +61,7 @@ headers.setBasicAuth("admin", "admin");
 HttpEntity<String> request = new HttpEntity<>(headers);
 ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
 ```
-### 3. List All Distribution Centres
+### 5. List All Distribution Centres
 **Description**: Retrieves a list of all distribution centres.  
 **Method**: `GET`  
 **URL**: `/api/distribution-centres`  
@@ -49,7 +74,7 @@ headers.setBasicAuth("admin", "admin");
 HttpEntity<String> request = new HttpEntity<>(headers);
 ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
 ```
-### 4. Request Items by Brand and Name
+### 6. Request Items by Brand and Name
 **Description**: Searches for items by exact brand and name substring, returning availability details.  
 **Method**: `GET`  
 **URL**: `/api/items/search?brand={brand}&name={name}`  

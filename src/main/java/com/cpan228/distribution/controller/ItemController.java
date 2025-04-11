@@ -5,9 +5,11 @@ import com.cpan228.distribution.data.ItemRepository;
 import com.cpan228.distribution.dto.ItemAvailabilityDTO;
 import com.cpan228.distribution.model.DistributionCentreItems;
 import com.cpan228.distribution.model.Items;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,9 +57,31 @@ public class ItemController {
         return ResponseEntity.ok(results);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<String> addItem(@RequestBody Items item) {
-        itemRepository.save(item);
-        return ResponseEntity.noContent().build();
+    @PostMapping("/create")
+    public ResponseEntity<String> createItem(
+            @RequestParam("name") String name,
+            @RequestParam("brand") String brand,
+            @RequestParam("year") int year,
+            @RequestParam("price") double price) {
+
+        // Check if an item with this name and brand already exists
+        if (itemRepository.existsByNameAndBrand(name, brand)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Item with this name and brand already exists");
+        }
+
+        // Create a new Items entity
+        Items newItem = new Items();
+        newItem.setName(name);
+        newItem.setBrand(brand);
+        newItem.setYear(year);
+        newItem.setPrice(price);
+
+        // Save to the database
+        itemRepository.save(newItem);
+
+        // Return 201 Created with the location
+        URI location = URI.create("/api/items/" + newItem.getId());
+        return ResponseEntity.created(location).body("Item created successfully");
     }
 }
