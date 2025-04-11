@@ -1,13 +1,11 @@
 package com.cpan228.distribution.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Items {
@@ -21,14 +19,12 @@ public class Items {
     @Column(name = "product_year")
     private int year;
     private double price;
-    private int quantity;
 
-    // Constructor without id and createdAt
-    public Items(String name, String brand, int year, double price, int quantity) {
+    public Items(Long id, String name, String brand, int year, double price) {
+        this.id = id;
         this.name = name;
         this.brand = brand;
         this.year = year;
         this.price = price;
-        this.quantity = quantity;
     }
 }

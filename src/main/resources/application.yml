@@ -8,8 +8,8 @@ spring:
     url: jdbc:h2:mem:devdb
   security:
     user:
-      name: admin1
-      password: admin1
+      name: admin
+      password: admin
 server:
   port: 8081
 # QA profile
@@ -22,7 +22,7 @@ spring:
     url: jdbc:h2:mem:qadb
   security:
     user:
-      name: admin2
-      password: admin2
+      name: admin
+      password: admin
 server:
   port: 8082
