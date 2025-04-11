@@ -1,13 +1,13 @@
 package com.cpan228.distribution.controller;
 
 import com.cpan228.distribution.data.DistributionCentreItemRepository;
+import com.cpan228.distribution.data.ItemRepository;
 import com.cpan228.distribution.dto.ItemAvailabilityDTO;
 import com.cpan228.distribution.model.DistributionCentreItems;
+import com.cpan228.distribution.model.Items;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,9 +16,11 @@ import java.util.stream.Collectors;
 public class ItemController {
 
     private final DistributionCentreItemRepository dciRepository;
+    private final ItemRepository itemRepository;
 
-    public ItemController(DistributionCentreItemRepository dciRepository) {
+    public ItemController(DistributionCentreItemRepository dciRepository, ItemRepository itemRepository) {
         this.dciRepository = dciRepository;
+        this.itemRepository = itemRepository;
     }
 
     @GetMapping("/search")
@@ -45,5 +47,17 @@ public class ItemController {
 
         // Return 200 OK with the list
         return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Items>> getAllItems() {
+        List<Items> results = itemRepository.findAll();
+        return ResponseEntity.ok(results);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<String> addItem(@RequestBody Items item) {
+        itemRepository.save(item);
+        return ResponseEntity.noContent().build();
     }
 }
