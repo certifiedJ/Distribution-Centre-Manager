@@ -22,14 +22,18 @@ headers.setBasicAuth("admin", "admin");
 HttpEntity<String> request = new HttpEntity<>(headers);
 ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
 ```
-### 2. Add existing Item to Distribution Centre
-**Description**: Adds an existing item to a distribution centre with a specified quantity or updates the quantity if the item already exists.  
+### 2. Manipulate Item in a Distribution Centre
+**Description**: associate new item with distribution centre or **_addition/subtraction_** the amount of item in a centre.   
+* add a new item with positive amount in a centre
+* increase the amount of existing item in a centre with positive number
+* delete the specific amount of existing item in a centre with negative number 
+
 **Method**: `POST`  
 **URL**: `/api/distribution-centres/{centreId}/items?itemId={itemId}&quantity={quantity}`  
 **Example**:
 ```java
 RestTemplate restTemplate = new RestTemplate();
-String url = "http://localhost:8081/api/distribution-centres/1/items?itemId=2&quantity=10";
+String url = "http://localhost:8081/api/distribution-centres/1/items?itemId=2&quantity=-10";
 HttpHeaders headers = new HttpHeaders();
 headers.setBasicAuth("admin", "admin");
 HttpEntity<String> request = new HttpEntity<>(headers);
@@ -49,7 +53,7 @@ HttpEntity<String> request = new HttpEntity<>(headers);
 ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
 ```
 ### 4. Delete Item from Distribution Centre
-**Description**: Removes an item from a specific distribution centre.  
+**Description**: Dissociate/Removes an item from a specific distribution centre completely.  
 **Method**: `DELETE`  
 **URL**: `/api/distribution-centres/{centreId}/items/{itemId}`  
 **Example**:

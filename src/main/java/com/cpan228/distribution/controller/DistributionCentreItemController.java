@@ -54,17 +54,35 @@ public class DistributionCentreItemController {
         // Check if the item is already associated with the centre
         Optional<DistributionCentreItems> existingAssociation = dciRepository.findByDistributionCentreAndItem(centre, item);
         if (existingAssociation.isPresent()) {
-            // Update the existing quantity
             DistributionCentreItems dci = existingAssociation.get();
-            dci.setQuantity(dci.getQuantity() + quantity);
+            int currentQuantity = dci.getQuantity();
+            int newQuantity = currentQuantity + quantity;
+
+            // Validate subtraction: ensure quantity doesn't go below zero
+            if (quantity < 0 && newQuantity < 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Cannot reduce quantity below zero");
+            }
+
+            // Update the quantity
+            dci.setQuantity(newQuantity);
             dciRepository.save(dci);
-            return ResponseEntity.ok("Quantity updated for existing item in distribution centre");
+
+            // Customize response based on operation
+            String operation = (quantity > 0) ? "added" : "subtracted";
+            return ResponseEntity.ok("Quantity " + operation + ": new quantity is " + newQuantity);
         } else {
+            // For new associations, only allow positive quantity
+            if (quantity <= 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Cannot create association with non-positive quantity");
+            }
+
             // Create a new association
             DistributionCentreItems newDci = new DistributionCentreItems(centre, item, quantity);
             dciRepository.save(newDci);
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body("Item added to distribution centre");
+                    .body("Item added to distribution centre with quantity " + quantity);
         }
     }
 
