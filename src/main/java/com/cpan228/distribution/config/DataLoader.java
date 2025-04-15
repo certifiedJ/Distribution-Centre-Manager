@@ -1,14 +1,15 @@
 package com.cpan228.distribution.config;
 
-import com.cpan228.distribution.data.DistributionCentreRepository;
-import com.cpan228.distribution.data.DistributionCentreItemRepository;
-import com.cpan228.distribution.data.ItemRepository;
-import com.cpan228.distribution.model.DistributionCentres;
-import com.cpan228.distribution.model.DistributionCentreItems;
-import com.cpan228.distribution.model.Items;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.cpan228.distribution.data.DistributionCentreItemRepository;
+import com.cpan228.distribution.data.DistributionCentreRepository;
+import com.cpan228.distribution.data.ItemRepository;
+import com.cpan228.distribution.model.DistributionCentreItems;
+import com.cpan228.distribution.model.DistributionCentres;
+import com.cpan228.distribution.model.Items;
 
 @Configuration
 public class DataLoader {
@@ -17,7 +18,7 @@ public class DataLoader {
     public CommandLineRunner loadData(DistributionCentreRepository dc_repository,
                                       DistributionCentreItemRepository dci_repository,
                                       ItemRepository i_repository) {
-        return args -> {
+        return _ -> {
             // Clear existing data
             dc_repository.deleteAll();
             i_repository.deleteAll();
