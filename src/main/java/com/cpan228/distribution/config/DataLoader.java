@@ -18,7 +18,7 @@ public class DataLoader {
     public CommandLineRunner loadData(DistributionCentreRepository dc_repository,
                                       DistributionCentreItemRepository dci_repository,
                                       ItemRepository i_repository) {
-        return _ -> {
+        return args -> {
             // Clear existing data
             dc_repository.deleteAll();
             i_repository.deleteAll();
