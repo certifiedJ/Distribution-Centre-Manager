@@ -1,3 +1,7 @@
+# Default profile setting
+spring:
+  profiles:
+    active: dev #Change to "qa" for QA profile
 # Dev profile
 ---
 spring:
